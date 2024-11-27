@@ -8,6 +8,8 @@ use App\Entity\HolidayStatus;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Option\IconSet;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -43,12 +45,19 @@ class DashboardController extends AbstractDashboardController
             ->setTitle('IPA');
     }
 
+    public function configureAssets(): Assets
+    {
+        return Assets::new()
+            ->useCustomIconSet('tabler')
+        ;
+    }
+
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Users', 'fas fa-plug', Employees::class)->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::linkToCrud('Types', 'fas fa-plug', HolidayTypes::class)->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::linkToCrud('Status', 'fas fa-plug', HolidayStatus::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToDashboard('Dashboard', 'layout-dashboard-filled');
+        yield MenuItem::linkToCrud('Users', 'user-filled', Employees::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('Types', 'stack-2-filled', HolidayTypes::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('Status', 'tag-filled', HolidayStatus::class)->setAction(Crud::PAGE_INDEX);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
