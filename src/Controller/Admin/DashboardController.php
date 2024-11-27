@@ -2,11 +2,15 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Employees;
+use App\Entity\HolidayTypes;
+use App\Entity\HolidayStatus;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -29,7 +33,8 @@ class DashboardController extends AbstractDashboardController
         // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
-        return $this->render('@EasyAdmin/layout.html.twig');
+        // return $this->render('@EasyAdmin/layout.html.twig');
+        return $this->render('@EasyAdmin/page/content.html.twig');
     }
 
     public function configureDashboard(): Dashboard
@@ -41,6 +46,9 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::linkToCrud('Users', 'fas fa-plug', Employees::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('Types', 'fas fa-plug', HolidayTypes::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('Status', 'fas fa-plug', HolidayStatus::class)->setAction(Crud::PAGE_INDEX);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
