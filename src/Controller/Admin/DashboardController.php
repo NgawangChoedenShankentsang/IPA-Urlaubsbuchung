@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Employees;
+use App\Entity\Holiday;
 use App\Entity\HolidayTypes;
 use App\Entity\HolidayStatus;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -36,7 +37,7 @@ class DashboardController extends AbstractDashboardController
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
         // return $this->render('@EasyAdmin/layout.html.twig');
-        return $this->render('@EasyAdmin/page/content.html.twig');
+        return $this->render('admin/dashboard.html.twig');
     }
 
     public function configureDashboard(): Dashboard
@@ -58,6 +59,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Users', 'user-filled', Employees::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('Types', 'stack-2-filled', HolidayTypes::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('Status', 'tag-filled', HolidayStatus::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('Request', 'pointer-filled', Holiday::class)->setAction(Crud::PAGE_INDEX);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
