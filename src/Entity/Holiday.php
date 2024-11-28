@@ -25,15 +25,15 @@ class Holiday
 
     #[ORM\ManyToOne(inversedBy: 'holidays')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?holidayStatus $statusId = null;
+    private ?HolidayStatus $statusId = null;
 
     #[ORM\ManyToOne(inversedBy: 'holidays')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?employees $employeeId = null;
+    private ?Employees $employeeId = null;
 
     #[ORM\ManyToOne(inversedBy: 'holidays')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?holidayTypes $typeId = null;
+    private ?HolidayTypes $typeId = null;
 
     public function getId(): ?int
     {
