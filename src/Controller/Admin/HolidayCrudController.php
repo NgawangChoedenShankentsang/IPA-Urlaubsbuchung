@@ -9,8 +9,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use Symfony\Component\Validator\Constraints\Date;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 class HolidayCrudController extends AbstractCrudController
 {
@@ -24,23 +28,27 @@ class HolidayCrudController extends AbstractCrudController
     {
         return [
             TextField::new('title'),
-            DateTimeField::new('startDate'),
-            DateTimeField::new('endDate'),
+            AssociationField::new('employeeId'),
+            DateField::new('startDate'),
+            DateField::new('endDate'),
             AssociationField::new('statusId')
                 ->setTemplatePath('admin/fields/holiday_status.html.twig'),
             AssociationField::new('typeId'),
-            AssociationField::new('employeeId'),
+            
         ];
     }
-    public function configureFilters(Filters $filters): Filters
+    public function configureActions(Actions $actions): Actions
     {
-        return $filters
-            ->add('employeeId', 'name')
-            ->add('typeId')
-            ->add('statusId')
-            ->add('startDate')
-            ->add('endDate');
-            // ->add(BexioAccountNameFilter::new('Bexio_ID')->setFormTypeOption('mapped', false));
+        return $actions
+            // ...
+            ->remove(Crud::PAGE_NEW, Action::SAVE_AND_ADD_ANOTHER)
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fa fa-plus')->setLabel(false);
+            })
+
+            // in PHP 7.4 and newer you can use arrow functions
+            // ->update(Crud::PAGE_INDEX, Action::NEW,
+            //     fn (Action $action) => $action->setIcon('fa fa-file-alt')->setLabel(false))
+        ;
     }
-    
 }

@@ -1,10 +1,56 @@
 {# templates/admin/dashboard.html.twig #}
 {% extends '@EasyAdmin/layout.html.twig' %}
 
+
 {% block head_stylesheets %}
     {{ parent() }}
+    <style>
+        #calender{
+            width: 80%;
+            margin: auto;
+        }
+    </style>
 
 {% endblock %}
+
 {% block content_title %}
 <h1 class="title">Dashboard</h1>
+{% endblock %}
+
+{% block main  %}
+    <div class="container-fluid">
+    <div id="calender">
+    </div>
+    </div>
+    <script>
+    window.onload = () => {
+        let calendarElt = document.querySelector("#calender")
+
+        let calendar = new FullCalendar.Calendar(calendarElt, {
+            initialView: 'dayGridMonth',
+            locale: 'en',
+            weekends: false,
+            timeZone: 'Europe/Zurich',
+            headerToolbar: {
+                start: 'prev,next today',
+                center: 'title',
+                end: 'dayGridMonth,timeGridWeek'
+            },
+            events: {{ data|raw }},
+            editable: true,
+            eventResizableFromStart: true
+        })
+
+        
+
+        calendar.render()
+    }
+</script>
+{% endblock %}
+
+
+
+{% block configured_javascripts %}
+<script src=" https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js "></script>        
+
 {% endblock %}

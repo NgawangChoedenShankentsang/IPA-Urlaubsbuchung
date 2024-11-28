@@ -1,3 +1,42 @@
+/* public/css/admin.css */
+/* Override the default Bootstrap variables */
+:root {
+  --sidebar-bg: #FFC8C8; 
+  --sidebar-menu-color: #242428;
+  --sidebar-menu-icon-color: #242428;
+  --sidebar-menu-header-color: #242428;
+  --sidebar-menu-active-item-bg: rgba(139, 139, 139, 0.5);
+  --sidebar-menu-active-item-color: #242428;
+  --sidebar-border-color: #FFC8C8;
+  --button-primary-bg: #ffffff;
+  --form-switch-checked-bg: #A8D45A;
+  --button-primary-color: #000000;
+  --sidebar-menu-header-color: #0000008f;
+  --pagination-active-bg: #A8D45A;
+  --pagination-active-color: #242428;
+  --badge-boolean-true-bg: #A8D45A;
+  --dropdown-color: #000000 !important;
+}
+
+@font-face {
+  font-family: "Inter", sans-serif;
+  src: url('/fonts/Inter-Italic-VariableFont_opsz,wght.ttf') format('ttf');
+}
+body {
+  font-family: "Inter", sans-serif;
+  font-weight: 200 !important;
+}
+
+#main-menu .menu .menu-header {
+  font-style: italic !important;
+  margin-top: 30px !important;
+}
+
+.action-new {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+}
+/* Stackoverflow  */
 .ea-index section.main-content {
     overflow: hidden;
     position: relative;
@@ -11,4 +50,47 @@
   .ea-index #main {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+  }
+
+
+  /* calender.js custom css */
+  .fc-timeGridWeek-button {
+    background-color: #FF9D9D !important;
+    border-color: #FF9D9D !important;
+    color: #000000 !important;
+    text-transform: uppercase !important;
+  }
+  .fc-dayGridMonth-button {
+    background-color: #FFC8C8 !important;
+    border-color: #FFC8C8 !important;
+    color: #000000 !important;
+    text-transform: uppercase !important;
+  }
+  .fc-today-button {
+    background-color: #FF9D9D !important;
+    border-color: #FF9D9D !important;
+    color: #000000 !important;
+    text-transform: uppercase !important;
+  }
+  .fc-next-button {
+    background-color: #FF9D9D !important;
+    border-color: #FF9D9D !important;
+    color: #000000 !important;
+    text-transform: uppercase !important;
+  }
+  .fc-prev-button {
+    background-color: #FFC8C8 !important;
+    border-color: #FFC8C8 !important;
+    color: #000000 !important;
+    text-transform: uppercase !important;
+  }
+  .fc-col-header-cell-cushion {
+    color: #000000 !important;
+  }
+
+  .fc-daygrid-day-number{
+    color: #000000 !important;
+  }
+  #fc-dom-1 {
+    font-weight: 900 !important;
   }

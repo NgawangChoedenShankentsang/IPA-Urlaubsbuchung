@@ -6,6 +6,8 @@ use App\Entity\Employees;
 use App\Entity\Holiday;
 use App\Entity\HolidayTypes;
 use App\Entity\HolidayStatus;
+use App\Repository\HolidayRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -17,33 +19,45 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 class DashboardController extends AbstractDashboardController
 {
+    private HolidayRepository $holidayRepository;
+
+    public function __construct(HolidayRepository $holidayRepository)
+    {
+        $this->holidayRepository = $holidayRepository;
+    }
     #[Route('/', name: 'admin')]
     public function index(): Response
     {
-        // return parent::index();
+        // Fetch holidays with status_id = 2 (Approved), and convert them to an array.
+        $holidays = $this->holidayRepository->findBy(['statusId' => 2]);
+        // Convert the holidays to an array of events
+        $events = [];
 
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
-
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirect('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
-        // return $this->render('@EasyAdmin/layout.html.twig');
-        return $this->render('admin/dashboard.html.twig');
+        // Loop through the holidays and add them to the events array
+        foreach ($holidays as $holiday) {
+            // Add the holiday to the events array
+            $events[] = [
+                'id' => $holiday->getId(),
+                'title' => $holiday->getTitle(),
+                'start' => $holiday->getStartDate()->format('Y-m-d H:i:s'),
+                'end' => $holiday->getEndDate()->format('Y-m-d H:i:s'),
+                'allDay' => false, // Adjust this based on your needs
+                'backgroundColor' => '#FFD8D8',
+                'borderColor' => '#FFD8D8',
+                'textColor' => '#000000',
+            ];
+        }
+        // Convert the events array to JSON
+        $data = json_encode($events);
+        // Render the dashboard view
+        return $this->render('admin/dashboard.html.twig', compact('data'));
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('IPA');
+            ->setTitle('IPA')
+            ->disableDarkMode();
     }
 
     public function configureAssets(): Assets
@@ -55,6 +69,9 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa-solid fa-desktop');
+        yield MenuItem::linkToCrud('Request', 'fa-solid fa-bell', Holiday::class)
+            ->setAction(Crud::PAGE_INDEX)
+            ->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Users', 'fas fa-user', Employees::class)
             ->setAction(Crud::PAGE_INDEX)
             ->setPermission('ROLE_ADMIN');
@@ -64,14 +81,12 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Status', 'fa-solid fa-tag', HolidayStatus::class)
             ->setAction(Crud::PAGE_INDEX)
             ->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Request', 'fa-solid fa-bell', Holiday::class)
-            ->setAction(Crud::PAGE_INDEX)
-            ->setPermission('ROLE_ADMIN');
+        
         // Restrict 'Book' menu explicitly for ROLE_USER only
-        if ($this->isGranted('ROLE_USER') && !$this->isGranted('ROLE_ADMIN')) {
-            yield MenuItem::linkToCrud('Book', 'fa-solid fa-calendar-days', Holiday::class)
-                ->setController(BookCrudController::class)
-                ->setAction(Crud::PAGE_INDEX);
+    if ($this->isGranted('ROLE_USER') && !$this->isGranted('ROLE_ADMIN')) {
+        yield MenuItem::linkToCrud('Book', 'fa-solid fa-calendar-days', Holiday::class)
+            ->setController(BookCrudController::class)
+            ->setAction(Crud::PAGE_INDEX);
     }
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
