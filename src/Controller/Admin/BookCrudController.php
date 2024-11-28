@@ -33,13 +33,19 @@ class BookCrudController extends AbstractCrudController
     {
         return [
             TextField::new('title'),
-            AssociationField::new('employeeId'),
+            AssociationField::new('employeeId')
+                ->hideOnIndex(),
+            TextField::new('employeeId')
+                ->hideOnForm(),
             DateTimeField::new('startDate')->setFormat('yyyy-MM-dd HH:mm:ss')->setLabel('Start Date'),
             DateTimeField::new('endDate')->setFormat('yyyy-MM-dd HH:mm:ss')->setLabel('End Date'),
             AssociationField::new('statusId')
             ->hideOnForm()
             ->setTemplatePath('admin/fields/holiday_status.html.twig'), 
-            AssociationField::new('typeId'),
+            AssociationField::new('typeId')
+                ->hideOnIndex(),
+            TextField::new('typeId')
+                ->hideOnForm(),
         ];
     }
 
