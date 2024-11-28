@@ -1,0 +1,14 @@
+.ea-index section.main-content {
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .ea-index article.content {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .ea-index #main {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }

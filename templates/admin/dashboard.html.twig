@@ -1,2 +1,10 @@
 {# templates/admin/dashboard.html.twig #}
 {% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+
+{% endblock %}
+{% block content_title %}
+<h1 class="title">Dashboard</h1>
+{% endblock %}

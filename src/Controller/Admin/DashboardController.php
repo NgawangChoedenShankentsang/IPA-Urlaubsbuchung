@@ -49,17 +49,16 @@ class DashboardController extends AbstractDashboardController
     public function configureAssets(): Assets
     {
         return Assets::new()
-            ->useCustomIconSet('tabler')
-        ;
+            ->addCssFile('css/admin.css');
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'layout-dashboard-filled');
-        yield MenuItem::linkToCrud('Users', 'user-filled', Employees::class)->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::linkToCrud('Types', 'stack-2-filled', HolidayTypes::class)->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::linkToCrud('Status', 'tag-filled', HolidayStatus::class)->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::linkToCrud('Request', 'pointer-filled', Holiday::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToDashboard('Dashboard', 'fa-solid fa-desktop');
+        yield MenuItem::linkToCrud('Users', 'fas fa-user', Employees::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('Types', 'fa-solid fa-layer-group', HolidayTypes::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('Status', 'fa-solid fa-tag', HolidayStatus::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('Request', 'fa-solid fa-bell', Holiday::class)->setAction(Crud::PAGE_INDEX);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
