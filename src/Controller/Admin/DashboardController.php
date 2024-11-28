@@ -12,10 +12,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Option\IconSet;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use Symfony\Component\Security\Core\Security;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -28,6 +30,8 @@ class DashboardController extends AbstractDashboardController
     #[Route('/', name: 'admin')]
     public function index(): Response
     {
+        
+
         // Fetch holidays with status_id = 2 (Approved), and convert them to an array.
         $holidays = $this->holidayRepository->findBy(['statusId' => 2]);
         // Convert the holidays to an array of events
@@ -35,10 +39,11 @@ class DashboardController extends AbstractDashboardController
 
         // Loop through the holidays and add them to the events array
         foreach ($holidays as $holiday) {
+            $employeeName = $holiday->getEmployeeId() ? $holiday->getEmployeeId()->getFirstName() : 'Unknown';
             // Add the holiday to the events array
             $events[] = [
                 'id' => $holiday->getId(),
-                'title' => $holiday->getTitle(),
+                'title' => $employeeName . ': ' . $holiday->getTitle(),
                 'start' => $holiday->getStartDate()->format('Y-m-d H:i:s'),
                 'end' => $holiday->getEndDate()->format('Y-m-d H:i:s'),
                 'allDay' => false, // Adjust this based on your needs
@@ -56,8 +61,9 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('IPA')
+            ->setTitle('<img src="logo/artd.ch-logo.png" style="width: 100px; height: auto;" alt="Logo">')
             ->disableDarkMode();
+
     }
 
     public function configureAssets(): Assets
@@ -69,7 +75,15 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa-solid fa-desktop');
-        yield MenuItem::linkToCrud('Request', 'fa-solid fa-bell', Holiday::class)
+        // Fetch the count of holidays with statusId = 1
+        $newRequestsCount = $this->holidayRepository->count(['statusId' => 1]);
+
+        // Show the badge in the menu if there are new requests
+        $requestLabel = $newRequestsCount > 0
+            ? 'Request <span class="badge badge-pill badge-danger">' . $newRequestsCount . '</span>'
+            : 'Request';
+
+        yield MenuItem::linkToCrud($requestLabel, 'fa-solid fa-bell', Holiday::class)
             ->setAction(Crud::PAGE_INDEX)
             ->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Users', 'fas fa-user', Employees::class)

@@ -26,7 +26,9 @@ body {
   font-family: "Inter", sans-serif;
   font-weight: 200 !important;
 }
-
+/* body:not(.ea-content-width-full) .content-wrapper {
+  margin: auto;
+} */
 #main-menu .menu .menu-header {
   font-style: italic !important;
   margin-top: 30px !important;
