@@ -67,6 +67,12 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Request', 'fa-solid fa-bell', Holiday::class)
             ->setAction(Crud::PAGE_INDEX)
             ->setPermission('ROLE_ADMIN');
+        // Restrict 'Book' menu explicitly for ROLE_USER only
+        if ($this->isGranted('ROLE_USER') && !$this->isGranted('ROLE_ADMIN')) {
+            yield MenuItem::linkToCrud('Book', 'fa-solid fa-calendar-days', Holiday::class)
+                ->setController(BookCrudController::class)
+                ->setAction(Crud::PAGE_INDEX);
+    }
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 }
